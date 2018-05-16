@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include "graph.h"
 
-#define INFINITY INT_MAX
+// using INT_MAX breaks the Floyd-Warshall algorithm; this is a safer value
+#define INFINITY 9999
 
 /**
  * Create a new instance of the graph type
@@ -166,11 +167,19 @@ int *find_shortest_path_A(Graph *self, int source, int target) {
 		final[i + 1] = path[length - 1 - i];
 	}
 
-	// remove the temporary array and return the result
+	// remove the temporary arrays and return the result
 	free(path);
+	free(dist);
+	free(prev);
 	return final;
 }
 
+/**
+ * Run the Floyd–Warshall algorithm on a graph
+ * @param self  Graph instance
+ * @param dist  Pointer to empty two-dimensional array of size self->V square
+ * @param next  Pointer to empty two-dimensional array of size self->V square
+ */
 void floyd(Graph *self, int** dist, int**next) {
 
 	// initialise the two-dimensional arrays with default values
@@ -187,9 +196,8 @@ void floyd(Graph *self, int** dist, int**next) {
 
 		while (current != NULL) {
 			int dest = current->edge.to_vertex;
-
 			dist[src][dest] = current->edge.weight;
-
+			next[src][dest] = dest;
 			current = current->next;
 		}
 
@@ -197,9 +205,9 @@ void floyd(Graph *self, int** dist, int**next) {
 		dist[src][src] = 0;
 	}
 
-	for (int k = 1; k < self->V; k++) {
-		for (int i = 1; i < self->V; i++) {
-			for (int j = 1; j < self->V; j++) {
+	for (int k = 0; k < self->V; k++) {
+		for (int i = 0; i < self->V; i++) {
+			for (int j = 0; j < self->V; j++) {
 
 				if (dist[i][j] > dist[i][k] + dist[k][j]) {
 					dist[i][j] = dist[i][k] + dist[k][j];
@@ -233,12 +241,21 @@ int *find_shortest_path_B(Graph *self, int source, int target) {
 	// Run the Floyd-Warshall algorithm
 	floyd(self, dist, next);
 
+	// Return an empty list if there is no valid path
+	if (next[source][target] == -1) {
+		int *final = malloc(sizeof(int));
+		*final = 0;
+		*distance = 0;
+		return final;
+	}
+
 	// Retrace the path from the source vertex to the target
 	int *path = malloc(sizeof(int) * self->V);
-	int length = 0;
+	int length = 1;
+	path[0] = source;
+
 
 	int vertex = source;
-	path[0] = source;
 
 	while (vertex != target) {
 		vertex = next[vertex][target];
