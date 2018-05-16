@@ -11,7 +11,7 @@
  * @return
  */
 int** make_dem(int size, int roughness) {
-	int seed = time(NULL);
+	unsigned int seed = (unsigned) time(NULL);
 	srand(seed);
 	int** dem = malloc(size * sizeof *dem);
 	for (int x = 0; x < size; x++) {
