@@ -154,11 +154,11 @@ void print_2D_ascii(int** array2D, int size) {
 
 /**
  * Generate a graph from a digital elevation map
- * @param graph  Graph instance to add new edges to
- * @param dem    source digital elevation map
+ * @param self   source digital elevation map
  * @param size   size of map
+ * @param graph  Graph instance to add new edges to
  */
-void generate_map_graph(Graph *graph, int **dem, const int size) {
+void generate_map_graph(int **self, const int size, Graph *graph) {
 	const int DIRECTIONS = 4;
 	const int VERTICES = size * size;
 
@@ -178,7 +178,7 @@ void generate_map_graph(Graph *graph, int **dem, const int size) {
 
 			// If the point is valid, calculate the cost and add an edge to the graph
 			if (0 <= dest && dest < VERTICES) {
-				int cost = cost_funcA(dem[x2][y2] - dem[x1][y1]);
+				int cost = cost_funcA(self[x2][y2] - self[x1][y1]);
 				add_edge(graph, src, dest, cost);
 			}
 		}
@@ -206,18 +206,32 @@ int **clone_dem(int **self, const int size) {
 }
 
 /**
+ * Free all memory allocated to a DEM
+ * @param self
+ * @param size
+ */
+void destroy_dem(int **self, const int size) {
+
+	for (int x = 0; x < size; x++) {
+		free(self[x]);
+	}
+
+	free(self);
+}
+
+/**
  * Apply a given path to a map
- * @param dem     map to traverse
+ * @param self    map to traverse
  * @param size    size of map
  * @param path    path to apply
  * @param length  length of path
  */
-void traverse_map(int **dem, const int size, int *path, const int length) {
+void traverse_map(int **self, const int size, int *path, const int length) {
 
 	for (int i = 0; i < length; i++) {
 		int x = path[i] / size;
 		int y = path[i] % size;
 
-		dem[x][y] = -1;
+		self[x][y] = -1;
 	}
 }

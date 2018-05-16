@@ -12,7 +12,7 @@ void wait_for_exit() {
 void mission_A(int **dem, const int size) {
 
 	Graph graph = create_graph(size * size);
-	generate_map_graph(&graph, dem, size);
+	generate_map_graph(dem, size, &graph);
 
 	int *path = find_shortest_path(&graph, 0, size * size - 1);
 
@@ -37,5 +37,6 @@ int main() {
 
 	mission_A(dem, SIZE);
 
+	destroy_dem(dem, SIZE);
 	return 0;
 }
