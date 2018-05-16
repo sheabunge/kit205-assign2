@@ -1,6 +1,7 @@
-﻿#include <stdlib.h>
-#include <stdbool.h>
+﻿#include <stdbool.h>
+#include <stdlib.h>
 #include <limits.h>
+#include <stdio.h>
 #include "graph.h"
 
 #define INFINITY INT_MAX
@@ -23,6 +24,12 @@ Graph create_graph(int vertices) {
 	return self;
 }
 
+void check_vertex(Graph *self, int vertex) {
+	if (vertex < 0 || vertex >= self->V) {
+		fprintf(stderr, "vertex %d is out of range", vertex);
+	}
+}
+
 /**
  * Add a new directed edge to a graph
  * @param self    Graph instance
@@ -32,6 +39,9 @@ Graph create_graph(int vertices) {
  */
 void add_edge(Graph *self, int from, int dest, int weight) {
 	EdgeNodePtr node = malloc(sizeof(node));
+
+	check_vertex(self, from);
+	check_vertex(self, dest);
 
 	node->edge.to_vertex = dest;
 	node->edge.weight = weight;
