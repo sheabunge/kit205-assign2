@@ -184,3 +184,40 @@ void generate_map_graph(Graph *graph, int **dem, const int size) {
 		}
 	}
 }
+
+/**
+ * Copy the contents of a DEM into a new variable
+ * @param self
+ * @param size
+ * @return
+ */
+int **clone_dem(int **self, const int size) {
+	int** result = malloc(size * sizeof(int *));
+
+	for (int x = 0; x < size; x++) {
+		result[x] = malloc(size * sizeof(int));
+
+		for (int y = 0; y < size; y++) {
+			result[x][y] = self[x][y];
+		}
+	}
+
+	return result;
+}
+
+/**
+ * Apply a given path to a map
+ * @param dem     map to traverse
+ * @param size    size of map
+ * @param path    path to apply
+ * @param length  length of path
+ */
+void traverse_map(int **dem, const int size, int *path, const int length) {
+
+	for (int i = 0; i < length; i++) {
+		int x = path[i] / size;
+		int y = path[i] % size;
+
+		dem[x][y] = -1;
+	}
+}
