@@ -190,21 +190,21 @@ void generate_map_graph(Graph *graph, int **dem, const int size) {
 /**
  * Run Dijkstra's algorithm on a graph
  * @param graph   instance of Graph
- * @param source  vertex number to begin paths at
+ * @param source  vertex number to search from
  * @param dist    empty array of length graph->V for storing shortest path distances
  * @param prev    empty array of length graph->V for storing the previous vertex in the paths
  */
 void dijkstra(Graph *graph, int source, int *dist, int *prev) {
 
 	// Instead of using sets, use an array to determine if each node has been visited
-	int *unvisited = malloc(sizeof(int) * graph->V);
+	int *unvisited = malloc(sizeof(bool) * graph->V);
 
 	// Also keep a running count of how many nodes have been visited
 	int visits = 0;
 
 	// Initialise the arrays with default values
 	for (int v = 0; v < graph->V; v++) {
-		dist[v] = -1;
+		dist[v] = INT_MAX;
 		prev[v] = -1;
 		unvisited[v] = true;
 	}
@@ -234,7 +234,7 @@ void dijkstra(Graph *graph, int source, int *dist, int *prev) {
 			int alt = dist[u] + current->edge.weight;
 			int dest = current->edge.to_vertex;
 
-			if (unvisited[dest] && (dist[dest] == -1 || alt < dist[dest])) {
+			if (unvisited[dest] && alt < dist[dest]) {
 				dist[dest] = alt;
 				prev[dest] = u;
 			}
