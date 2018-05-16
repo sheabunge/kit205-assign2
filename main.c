@@ -246,31 +246,54 @@ void dijkstra(Graph *graph, int source, int *dist, int *prev) {
 	free(unvisited);
 }
 
-int *find_shortest_path(Graph *graph, int source, int target, int *length) {
+/**
+ * Retrieve the shortest path from a given source to a destination
+ *
+ * @param graph   instance of Graph
+ * @param source  vertex where path should begin
+ * @param target  vertex where path should end
+ *
+ * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ */
+int *find_shortest_path(Graph *graph, int source, int target) {
 
 	/* run Dijkstra's algorithm to retrieve a list of shortest paths */
 	int *dist = malloc(sizeof(int) * graph->V);
 	int *prev = malloc(sizeof(int) * graph->V);
 	dijkstra(graph, source, dist, prev);
 
-	int *path = malloc(sizeof(int) * dist[target]);
+	// allocate memory for the largest possible path
+	int *path = malloc(sizeof(int) * graph->V);
 
-	int i = 0;
+	// trace the path from the target back to the source
+	int length = 0;
 	int vertex = target;
 
-	while (prev[vertex] != -1) {
-		printf("%d ", prev[vertex]);
-		path[i] = prev[vertex];
+	// continue looping until the previous vertex is undefined (source vertex reached)
+	while (vertex != -1) {
+		path[length] = vertex;
 		vertex = prev[vertex];
-		i++;
+		length++;
 	}
 
-	path[i] = prev[vertex];
-	*length = i;
+	// create an array more appropriately sized for the final path
+	int *final = malloc(sizeof(int) * (length + 1));
+	final[0] = length; // set the first index to the path length
 
-	return path;
+	// loop through the vertices in the path and add them to the final array in the correct order
+	for (int i = 0; i < length; i++) {
+		final[i + 1] = path[length - 1 - i];
+	}
+
+	// remove the temporary array and return the result
+	free(path);
+	return final;
 }
 
+/**
+ * Main function
+ * @return
+ */
 int main() {
 	const int SIZE = 5;
 
@@ -280,16 +303,14 @@ int main() {
 	Graph graph = create_graph(SIZE * SIZE);
 	generate_map_graph(&graph, dem, SIZE);
 
-	for (int v = 0; v < graph.V; v++) {
-		EdgeNodePtr current = graph.edges[v].head;
+	int last_vertex = SIZE * SIZE - 1;
 
-		while (current != NULL) {
-			printf("%d -> %d (%d)\n", v, current->edge.to_vertex, current->edge.weight);
-			current = current->next;
+	int *path = find_shortest_path(&graph, 0, last_vertex);
 
-			if (current == NULL) {
-				printf("\n");
-			}
+	for (int i = 1; i <= path[0]; i++) {
+		printf("%d", path[i]);
+		if (i != path[0]) {
+			printf(" → ");
 		}
 	}
 
