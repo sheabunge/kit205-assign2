@@ -2,6 +2,20 @@
 #include "graph.h"
 
 /**
+ * Print the values in a two-dimensional array
+ * @param array2D
+ * @param size
+ */
+void print_2D(int** array2D, int size);
+
+/**
+ * Print the values in a two-dimensional array as ascii art
+ * @param array2D
+ * @param size
+ */
+void print_2D_ascii(int** array2D, int size);
+
+/**
  * Generate a digital elevation map (DEM)
  *
  * @param size       dimension of map – must be n^2 + 1
@@ -22,7 +36,7 @@ int **clone_dem(int **self, int size);
 
 /**
  * Free all memory allocated to a DEM
- * @param dem
+ * @param self
  * @param size
  */
 void destroy_dem(int **self, int size);
@@ -37,23 +51,9 @@ void generate_map_graph(int **self, int size, Graph *graph);
 
 /**
  * Apply a given path to a map
- * @param self     map to traverse
+ * @param self    map to traverse
  * @param size    size of map
  * @param path    path to apply
  * @param length  length of path
  */
 void traverse_map(int **self, int size, int *path, int length);
-
-/**
- * Print the values in a two-dimensional array
- * @param array2D
- * @param size
- */
-void print_2D(int** array2D, int size);
-
-/**
- * Print the values in a two-dimensional array as ascii art
- * @param array2D
- * @param size
- */
-void print_2D_ascii(int** array2D, int size);

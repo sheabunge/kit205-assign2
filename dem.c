@@ -4,6 +4,45 @@
 #include <stdio.h>
 
 /**
+ * Print the values in a two-dimensional array
+ * @param array2D
+ * @param size
+ */
+void print_2D(int** array2D, int size) {
+	for (int x = 0; x < size; x++) {
+		for (int y = 0; y < size; y++) {
+			if (array2D[x][y] > 0) {
+				printf("%2d ", array2D[x][y]);
+			}
+			else {
+				printf("() ");
+			}
+		}
+		printf("\n");
+	}
+}
+
+/**
+ * Print the values in a two-dimensional array as ascii art
+ * @param array2D
+ * @param size
+ */
+void print_2D_ascii(int** array2D, int size) {
+	char *shades = " .-:=+*#%@";
+	for (int x = 0; x < size; x++) {
+		for (int y = 0; y < size; y++) {
+			if (array2D[x][y] >= 0) {
+				char shade = shades[array2D[x][y] * 10 / 100];
+				printf("%c%c", shade, shade);
+			} else {
+				printf("()");
+			}
+		}
+		printf("\n");
+	}
+}
+
+/**
  * Generate a digital elevation map (DEM)
  *
  * @param size       dimension of map – must be n^2 + 1
