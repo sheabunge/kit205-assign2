@@ -9,7 +9,7 @@ void wait_for_exit() {
 	getchar();
 }
 
-void mission_A(int **dem, const int size) {
+int **generate_map_A(int **dem, const int size) {
 
 	Graph graph = create_graph(size * size);
 	generate_map_graph(dem, size, &graph);
@@ -19,10 +19,9 @@ void mission_A(int **dem, const int size) {
 	int **map = clone_dem(dem, size);
 	traverse_map(map, size, path + 1, path[0]);
 
-	print_2D_ascii(map, size);
-
-	wait_for_exit();
 	destroy_graph(&graph);
+
+	return map;
 }
 
 
@@ -35,8 +34,11 @@ int main() {
 	print_2D_ascii(dem, SIZE);
 	printf("\n\n");
 
-	mission_A(dem, SIZE);
+	int **map_a = generate_map_A(dem, SIZE);
+	print_2D_ascii(map_a, SIZE);
 
+	wait_for_exit();
 	destroy_dem(dem, SIZE);
+	destroy_dem(map_a, SIZE);
 	return 0;
 }
