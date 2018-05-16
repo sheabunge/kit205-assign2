@@ -162,25 +162,26 @@ void print_2D_ascii(int** array2D, int size) {
  */
 void generate_map_graph(Graph *graph, int **dem, const int size) {
 	const int DIRECTIONS = 4;
+	const int VERTICES = size * size;
 
 	// Loop through every point in the map
-	for (int v = 0; v < size * size; v++) {
+	for (int src = 0; src < VERTICES; src++) {
+		int x1 = src / size;
+		int y1 = src % size;
 
-		int x1 = v / size;
-		int y1 = v % size;
-
-		// determine points immediately to the south, west, east, and north
-		const int STEPS[4] = {v + size, v + 1, v - 1, v - size};
+		// Determine points immediately to the south, west, east and north
+		const int STEPS[4] = {src + size, src + 1, src - 1, src - size};
 
 		for (int step = 0; step < DIRECTIONS; step++) {
-			int x2 = STEPS[step] / size;
-			int y2 = STEPS[step] % size;
+			int dest = STEPS[step];
 
-			// If the point is valid, calculate the cost and add it to the graph
-			if (0 <= x2 && x2 < size && 0 <= y2 && y2 < size) {
+			int x2 = dest / size;
+			int y2 = dest % size;
+
+			// If the point is valid, calculate the cost and add an edge to the graph
+			if (0 <= dest && dest < VERTICES) {
 				int cost = cost_funcA(dem[x2][y2] - dem[x1][y1]);
-
-				add_edge(graph, v, STEPS[step], cost);
+				add_edge(graph, src, dest, cost);
 			}
 		}
 	}
