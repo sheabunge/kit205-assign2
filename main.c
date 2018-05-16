@@ -38,47 +38,34 @@ int cost_funcB(int diff) {
 }
 
 /**
- * Find the most efficient path through a digital elevation map using Dijkstra's algorithm
+ * Find the most efficient path through a digital elevation map
  * @param dem
  * @param size
+ * @param find_shortest_path
+ * @param cost_func
  * @return
  */
-int **generate_map_A(int **dem, const int size) {
+void run_mission(int **dem, int size, int *find_shortest_path(Graph *, int, int, int *), int cost_func(int)) {
 
+	// Create a graph and populate it from the digital elevation map
 	Graph graph = create_graph(size * size);
-	generate_map_graph(dem, size, &graph, cost_funcA);
+	generate_map_graph(dem, size, &graph, cost_func);
 
-	int *path = find_shortest_path_A(&graph, 0, size * size - 1);
+	// Use the provided shortest path algorithm to find the most efficient path through the map
+	int energy;
+	int *path = find_shortest_path(&graph, 0, size * size - 1, &energy);
 
+	// Clone the provided map and plot the path onto it
 	int **map = clone_dem(dem, size);
 	traverse_map(map, size, path + 1, path[0]);
 
+	print_2D_ascii(map, size);
+	printf("\ntotal energy: %d\n", energy);
+
+	// Free memory allocated to data structures
+	destroy_dem(map, size);
 	destroy_graph(&graph);
-
-	return map;
 }
-
-/**
- * Find the most efficient path through a digital elevation map using the Floyd-Warshall algorithm
- * @param dem
- * @param size
- * @return
- */
-int **generate_map_B(int **dem, const int size) {
-
-	Graph graph = create_graph(size * size);
-	generate_map_graph(dem, size, &graph, cost_funcB);
-
-	int *path = find_shortest_path_A(&graph, 0, size * size - 1);
-
-	int **map = clone_dem(dem, size);
-	traverse_map(map, size, path + 1, path[0]);
-
-	destroy_graph(&graph);
-
-	return map;
-}
-
 
 int main() {
 	const int SIZE = 5;
@@ -87,21 +74,16 @@ int main() {
 //	int** dem = make_dem(SIZE, SIZE * 4);
 	int **dem = static_dem();
 	print_2D_ascii(dem, SIZE);
+	printf("\n\n");
 
 	// Use Dijkstra's algorithm to plot the most efficient path on the map
+	run_mission(dem, SIZE, find_shortest_path_A, cost_funcA);
 	printf("\n\n");
-	int **map_a = generate_map_A(dem, SIZE);
-	print_2D_ascii(map_a, SIZE);
 
 	// Use the Floyd-Warshall algorithm to plot the most efficient path on the map
-	printf("\n\n");
-	int **map_b = generate_map_B(dem, SIZE);
-	print_2D_ascii(map_b, SIZE);
+	run_mission(dem, SIZE, find_shortest_path_B, cost_funcB);
 
-	// Free memory and exit the program
 	wait_for_exit();
 	destroy_dem(dem, SIZE);
-	destroy_dem(map_a, SIZE);
-	destroy_dem(map_b, SIZE);
 	return 0;
 }

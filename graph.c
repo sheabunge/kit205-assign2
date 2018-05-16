@@ -130,15 +130,16 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
 }
 
 /**
- * Retrieve the shortest path from a given source to a destination
+ * Retrieve the shortest path from a given source to a destination using Dijkstra's algorithm
  *
- * @param self    Graph instance
- * @param source  vertex where path should begin
- * @param target  vertex where path should end
+ * @param self      Graph instance
+ * @param source    vertex where path should begin
+ * @param target    vertex where path should end
+ * @param distance  pointer to address for storing total distance used by the path
  *
  * @return array with index 0 set to the length of the path, followed by ordered path vertices
  */
-int *find_shortest_path_A(Graph *self, int source, int target) {
+int *find_shortest_path_A(Graph *self, int source, int target, int *distance) {
 
 	/* run Dijkstra's algorithm to retrieve a list of shortest paths */
 	int *dist = malloc(sizeof(int) * self->V);
@@ -157,6 +158,8 @@ int *find_shortest_path_A(Graph *self, int source, int target) {
 		vertex = prev[vertex];
 		length++;
 	}
+
+	*distance = dist[target];
 
 	// create a more appropriately sized array for the final path
 	int *final = malloc(sizeof(int) * (length + 1));
@@ -215,19 +218,20 @@ void floyd(Graph *self, int** dist, int**next) {
 				}
 			}
 		}
-	}
+		}
 }
 
 /**
- * Retrieve the shortest path from a given source to a destination
+ * Retrieve the shortest path from a given source to a destination using the Floyd-Warshall algorithm
  *
- * @param self    Graph instance
- * @param source  vertex where path should begin
- * @param target  vertex where path should end
+ * @param self      Graph instance
+ * @param source    vertex where path should begin
+ * @param target    vertex where path should end
+ * @param distance  pointer to address for storing total distance used by the path
  *
  * @return array with index 0 set to the length of the path, followed by ordered path vertices
  */
-int *find_shortest_path_B(Graph *self, int source, int target) {
+int *find_shortest_path_B(Graph *self, int source, int target, int *distance) {
 
 	// Allocate memory for the two-dimensional arrays
 	int **dist = malloc(sizeof(int *) * self->V);
@@ -262,6 +266,8 @@ int *find_shortest_path_B(Graph *self, int source, int target) {
 		path[length] = vertex;
 		length++;
 	}
+
+	*distance = dist[source][target];
 
 	// Transpose the path into a more appropriately-sized array
 	int *final = malloc(sizeof(int) * (length + 1));
