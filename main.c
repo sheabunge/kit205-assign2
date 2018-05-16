@@ -160,32 +160,29 @@ void print_2D_ascii(int** array2D, int size) {
  * @param dem    source digital elevation map
  * @param size   size of map
  */
-void generate_map_graph(Graph *graph, int **dem, int size) {
-	const int STEPS = 4;
-
-	// Generate a list of possible relative adjacent points
-	const int X_STEPS[4] = {-1,  0, +1,  0};
-	const int Y_STEPS[4] = { 0, -1,  0, +1};
+void generate_map_graph(Graph *graph, int **dem, const int size) {
+	const int DIRECTIONS = 4;
 
 	// Loop through every point in the map
-	for (int x = 0; x < size; x++) {
-		for (int y = 0; y < size; y++) {
-			int from = x * size + y;
+	for (int v = 0; v < size * size; v++) {
 
-			// Loop through the potential adjacent points
-			for (int step = 0; step < STEPS; step++) {
-				int x2 = x + X_STEPS[step];
-				int y2 = y + Y_STEPS[step];
+		int x1 = v / size;
+		int y1 = v % size;
 
-				// If the point is valid, calculate the cost and add it to the graph
-				if (0 <= x2 && x2 < size && 0 <= y2 && y2 < size) {
-					int dest = x2 * size + y2;
-					int cost = cost_funcA(dem[x2][y2] - dem[x][y]);
+		// determine points immediately to the south, west, east, and north
+		const int STEPS[4] = {v + size, v + 1, v - 1, v - size};
 
-					add_edge(graph, from, dest, cost);
-				}
+		for (int step = 0; step < DIRECTIONS; step++) {
+			int x2 = STEPS[step] / size;
+			int y2 = STEPS[step] % size;
+
+			// If the point is valid, calculate the cost and add it to the graph
+			if (0 <= x2 && x2 < size && 0 <= y2 && y2 < size) {
+				int cost = cost_funcA(dem[x2][y2] - dem[x1][y1]);
+
+				add_edge(graph, v, STEPS[step], cost);
 			}
-			}
+		}
 	}
 }
 
