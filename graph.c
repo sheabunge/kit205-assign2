@@ -3,6 +3,8 @@
 #include <limits.h>
 #include "graph.h"
 
+#define INFINITY INT_MAX
+
 /**
  * Create a new instance of the graph type
  * @param vertices  amount of vertices in the graph
@@ -74,7 +76,7 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
 
 	// Initialise the arrays with default values
 	for (int v = 0; v < self->V; v++) {
-		dist[v] = INT_MAX;
+		dist[v] = INFINITY;
 		prev[v] = -1;
 		unvisited[v] = true;
 	}
@@ -164,7 +166,7 @@ void floyd(Graph *self, int** dist, int**next) {
 	// initialise the two-dimensional arrays with default values
 	for (int i = 0; i < self->V; i++) {
 		for (int j = 0; j < self->V; j++) {
-			dist[i][j] = INT_MAX;
+			dist[i][j] = INFINITY;
 			next[i][j] = -1;
 		}
 	}
