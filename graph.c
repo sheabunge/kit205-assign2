@@ -125,7 +125,7 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
  *
  * @return array with index 0 set to the length of the path, followed by ordered path vertices
  */
-int *find_shortest_path(Graph *self, int source, int target) {
+int *find_shortest_path_A(Graph *self, int source, int target) {
 
 	/* run Dijkstra's algorithm to retrieve a list of shortest paths */
 	int *dist = malloc(sizeof(int) * self->V);
@@ -156,5 +156,101 @@ int *find_shortest_path(Graph *self, int source, int target) {
 
 	// remove the temporary array and return the result
 	free(path);
+	return final;
+}
+
+void floyd(Graph *self, int** dist, int**next) {
+
+	// initialise the two-dimensional arrays with default values
+	for (int i = 0; i < self->V; i++) {
+		for (int j = 0; j < self->V; j++) {
+			dist[i][j] = INT_MAX;
+			next[i][j] = -1;
+		}
+	}
+
+	// traverse the graph and add weights to the array
+	for (int src = 0; src < self->V; src++) {
+		EdgeNodePtr current = self->edges[src].head;
+
+		while (current != NULL) {
+			int dest = current->edge.to_vertex;
+
+			dist[src][dest] = current->edge.weight;
+
+			current = current->next;
+		}
+
+		// set the distance from the vertex to itself to zero
+		dist[src][src] = 0;
+	}
+
+	for (int k = 1; k < self->V; k++) {
+		for (int i = 1; i < self->V; i++) {
+			for (int j = 1; j < self->V; j++) {
+
+				if (dist[i][j] > dist[i][k] + dist[k][j]) {
+					dist[i][j] = dist[i][k] + dist[k][j];
+					next[i][j] = next[i][k];
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Retrieve the shortest path from a given source to a destination
+ *
+ * @param self    Graph instance
+ * @param source  vertex where path should begin
+ * @param target  vertex where path should end
+ *
+ * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ */
+int *find_shortest_path_B(Graph *self, int source, int target) {
+
+	// Allocate memory for the two-dimensional arrays
+	int **dist = malloc(sizeof(int *) * self->V);
+	int **next = malloc(sizeof(int *) * self->V);
+
+	for (int i = 0; i < self->V; i++) {
+		dist[i] = malloc(sizeof(int) * self->V);
+		next[i] = malloc(sizeof(int) * self->V);
+	}
+
+	// Run the Floyd-Warshall algorithm
+	floyd(self, dist, next);
+
+	// Retrace the path from the source vertex to the target
+	int *path = malloc(sizeof(int) * self->V);
+	int length = 0;
+
+	int vertex = source;
+	path[0] = source;
+
+	while (vertex != target) {
+		vertex = next[vertex][target];
+		path[length] = vertex;
+		length++;
+	}
+
+	// Transpose the path into a more appropriately-sized array
+	int *final = malloc(sizeof(int) * (length + 1));
+	final[0] = length;
+
+	for (int i = 0; i < length; i++) {
+		final[i + 1] = path[i];
+	}
+
+	// Free all allocated memory
+	for (int i = 0; i < self->V; i++) {
+		free(dist[i]);
+		free(next[i]);
+	}
+
+	free(path);
+	free(dist);
+	free(next);
+
 	return final;
 }

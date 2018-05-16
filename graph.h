@@ -39,6 +39,12 @@ typedef struct graph {
 Graph create_graph(int vertices);
 
 /**
+ * Free all memory used by a graph instance
+ * @param self  Graph instance
+ */
+void destroy_graph(Graph *self);
+
+/**
  * Add a new directed edge to a graph
  * @param self    Graph instance
  * @param from    vertex where the edge begins
@@ -56,10 +62,15 @@ void add_edge(Graph *self, int from, int dest, int weight);
  *
  * @return array with index 0 set to the length of the path, followed by ordered path vertices
  */
-int *find_shortest_path(Graph *self, int source, int target);
+int *find_shortest_path_A(Graph *self, int source, int target);
 
 /**
- * Free all memory used by a graph instance
- * @param self  Graph instance
+ * Retrieve the shortest path from a given source to a destination
+ *
+ * @param self    Graph instance
+ * @param source  vertex where path should begin
+ * @param target  vertex where path should end
+ *
+ * @return array with index 0 set to the length of the path, followed by ordered path vertices
  */
-void destroy_graph(Graph *self);
+int *find_shortest_path_B(Graph *self, int source, int target);

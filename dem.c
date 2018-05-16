@@ -128,76 +128,13 @@ int **static_dem() {
 }
 
 /**
- * Returns the cost of moving between adjacent squares and increasing altitude
- * @param diff height difference between squares
- * @return movement cost
- */
-int cost_funcA(int diff) {
-	int cost = 1;
-	if (diff > 0) cost += diff * diff;
-	return cost;
-}
-
-/**
- * Returns the cost of moving between adjacent squares and increasing altitude
- * @param diff height difference between squares
- * @return movement cost
- */
-int cost_funcB(int diff) {
-	int cost = 1;
-	if (diff > 0)
-		cost += diff * diff;
-	else
-		cost += diff;
-	return cost;
-}
-
-/**
- * Print the values in a two-dimensional array
- * @param array2D
- * @param size
- */
-void print_2D(int** array2D, int size) {
-	for (int x = 0; x < size; x++) {
-		for (int y = 0; y < size; y++) {
-			if (array2D[x][y] > 0) {
-				printf("%2d ", array2D[x][y]);
-			}
-			else {
-				printf("() ");
-			}
-		}
-		printf("\n");
-	}
-}
-
-/**
- * Print the values in a two-dimensional array as ascii art
- * @param array2D
- * @param size
- */
-void print_2D_ascii(int** array2D, int size) {
-	char *shades = " .-:=+*#%@";
-	for (int x = 0; x < size; x++) {
-		for (int y = 0; y < size; y++) {
-			if (array2D[x][y] >= 0) {
-				char shade = shades[array2D[x][y] * 10 / 100];
-				printf("%c%c", shade, shade);
-			} else {
-				printf("()");
-			}
-		}
-		printf("\n");
-	}
-}
-
-/**
  * Generate a graph from a digital elevation map
- * @param self   source digital elevation map
- * @param size   size of map
- * @param graph  Graph instance to add new edges to
+ * @param self       source digital elevation map
+ * @param size       size of map
+ * @param graph      Graph instance to add new edges to
+ * @param cost_func  function to use for normalising edge weights
  */
-void generate_map_graph(int **self, const int size, Graph *graph) {
+void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(int)) {
 	const int DIRECTIONS = 4;
 	const int VERTICES = size * size;
 
@@ -217,7 +154,7 @@ void generate_map_graph(int **self, const int size, Graph *graph) {
 
 			// If the point is valid, calculate the cost and add an edge to the graph
 			if (0 <= dest && dest < VERTICES) {
-				int cost = cost_funcA(self[x2][y2] - self[x1][y1]);
+				int cost = cost_func(self[x2][y2] - self[x1][y1]);
 				add_edge(graph, src, dest, cost);
 			}
 		}

@@ -43,11 +43,12 @@ void destroy_dem(int **self, int size);
 
 /**
  * Generate a graph from a digital elevation map
- * @param self   source digital elevation map
- * @param size   size of map
- * @param graph  Graph instance to add new edges to
+ * @param self       source digital elevation map
+ * @param size       size of map
+ * @param graph      Graph instance to add new edges to
+ * @param cost_func  function to use for normalising edge weights
  */
-void generate_map_graph(int **self, int size, Graph *graph);
+void generate_map_graph(int **self, int size, Graph *graph, int cost_func(int));
 
 /**
  * Apply a given path to a map
