@@ -293,10 +293,8 @@ int main() {
 		}
 	}
 
-	print_2D(dem, SIZE);
-
-	printf("\npress enter to exit\n");
-	getchar();
+//	printf("\npress enter to exit\n");
+//	getchar();
 
 	destroy_graph(&graph);
 
