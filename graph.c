@@ -25,6 +25,11 @@ Graph create_graph(int vertices) {
 	return self;
 }
 
+/**
+ * Ensure that a specific vertex exists on a graph
+ * @param self
+ * @param vertex
+ */
 void check_vertex(Graph *self, int vertex) {
 	if (vertex < 0 || vertex >= self->V) {
 		fprintf(stderr, "vertex %d is out of range", vertex);

@@ -135,28 +135,49 @@ int **static_dem() {
  * @param cost_func  function to use for normalising edge weights
  */
 void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(int)) {
-	const int DIRECTIONS = 4;
 	const int VERTICES = size * size;
 
 	// Loop through every point in the map
-	for (int src = 0; src < VERTICES; src++) {
-		int x1 = src / size;
-		int y1 = src % size;
+	for (int start = 0; start < VERTICES; start++) {
+		int x1 = start / size;
+		int y1 = start % size;
 
-		// Determine points immediately to the south, west, east and north
-		const int STEPS[4] = {src + size, src + 1, src - 1, src - size};
+		// Create a list of potential movement destinations
+		int destinations[4];
+		int moves = 0;
 
-		for (int step = 0; step < DIRECTIONS; step++) {
-			int dest = STEPS[step];
+		// Can move south if not at the bottom of the map
+		if (x1 != size - 1) {
+			destinations[moves] = start + size;
+			moves++;
+		}
+
+		// Can move west if not at the left edge of the map
+		if (y1 != 0) {
+			destinations[moves] = start - 1;
+			moves++;
+		}
+
+		// Can move east if not at the right edge of the map
+		if (y1 != size - 1) {
+			destinations[moves] = start + 1;
+			moves++;
+		}
+
+		// Can move north if not at the top of the map
+		if (x1 != 0) {
+			destinations[moves] = start - size;
+			moves++;
+		}
+
+		for (int i = 0; i < moves; i++) {
+			int dest = destinations[i];
 
 			int x2 = dest / size;
 			int y2 = dest % size;
 
-			// If the point is valid, calculate the cost and add an edge to the graph
-			if (0 <= dest && dest < VERTICES) {
-				int cost = cost_func(self[x2][y2] - self[x1][y1]);
-				add_edge(graph, src, dest, cost);
-			}
+			int cost = cost_func(self[x2][y2] - self[x1][y1]);
+			add_edge(graph, start, dest, cost);
 		}
 	}
 }
