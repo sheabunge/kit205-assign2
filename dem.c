@@ -11,7 +11,7 @@
 void print_2D(int** array2D, int size) {
 	for (int x = 0; x < size; x++) {
 		for (int y = 0; y < size; y++) {
-			if (array2D[x][y] > 0) {
+			if (array2D[x][y] >= 0) {
 				printf("%2d ", array2D[x][y]);
 			}
 			else {
