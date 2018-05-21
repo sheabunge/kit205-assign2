@@ -1,1 +1,3 @@
-cmake-build-debug/
+x64/
+.vs
+*.log
