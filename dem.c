@@ -189,10 +189,10 @@ void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(
  * @return
  */
 int **clone_dem(int **self, const int size) {
-	int** result = malloc(size * sizeof(int *));
+	int** result = malloc(size * sizeof *result);
 
 	for (int x = 0; x < size; x++) {
-		result[x] = malloc(size * sizeof(int));
+		result[x] = malloc(size * sizeof result[x]);
 
 		for (int y = 0; y < size; y++) {
 			result[x][y] = self[x][y];

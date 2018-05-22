@@ -32,7 +32,7 @@ Graph create_graph(int vertices) {
  */
 void check_vertex(Graph *self, int vertex) {
 	if (vertex < 0 || vertex >= self->V) {
-		fprintf(stderr, "vertex %d is out of range", vertex);
+		fprintf(stderr, "vertex %d is out of range\n", vertex);
 	}
 }
 
@@ -44,7 +44,7 @@ void check_vertex(Graph *self, int vertex) {
  * @param weight  edge weight
  */
 void add_edge(Graph *self, int from, int dest, int weight) {
-	EdgeNodePtr node = malloc(sizeof(node));
+	EdgeNodePtr node = malloc(sizeof *node);
 
 	check_vertex(self, from);
 	check_vertex(self, dest);
