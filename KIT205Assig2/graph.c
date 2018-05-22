@@ -249,41 +249,38 @@ EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance
 	// run the Floyd-Warshall algorithm
 	floyd(self, dist, next);
 
+	// pass the total path distance out of the function through a variable pointer
+	*distance = dist[source][target];
+
 	// create a new linked list to hold the path
 	EdgeList path;
 	path.head = NULL;
 
-	// pass the total path distance out of the function through a variable pointer
-	*distance = dist[source][target];
+	// only attempt to retrace the path if a valid one exists
+	if (next[source][target] != -1) {
 
-	// return the empty list if no valid path was found
-	if (next[source][target] == -1) {
-		return path;
-	}
+		// retrace the path from the source vertex to the target
+		int vertex = source;
+		EdgeNodePtr prev = NULL;
 
-	// retrace the path from the source vertex to the target
-	int vertex = source;
-	EdgeNodePtr prev = NULL;
+		while (vertex != target) {
 
-	while (vertex != target) {
+			// create a new node to insert into the list
+			EdgeNodePtr node = malloc(sizeof *node);
+			node->next = NULL;
+			node->edge.to_vertex = vertex;
+			node->edge.weight = 0;
 
-		// create a new node to insert into the list
-		EdgeNodePtr node = malloc(sizeof *node);
+			// insert the new node immediately after the previous one
+			if (prev == NULL) {
+				path.head = node;
+			} else {
+				prev->next = node;
+			}
 
-		node->edge.to_vertex = vertex;
-		node->edge.weight = 0;
-
-		node->next = NULL;
-
-		// insert the new node immediately after the previous one
-		if (prev == NULL) {
-			path.head = node;
-		} else {
-			prev->next = node;
+			prev = node;
+			vertex = next[vertex][target];
 		}
-
-		prev = node;
-		vertex = next[vertex][target];
 	}
 
 	// Free all allocated memory

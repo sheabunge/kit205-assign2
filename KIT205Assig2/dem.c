@@ -50,7 +50,7 @@ void print_2D_ascii(int** array2D, int size) {
  * @return
  */
 int** make_dem(int size, int roughness) {
-	unsigned seed = 0; // (unsigned) time(NULL);
+	unsigned seed = (unsigned) time(NULL);
 	srand(seed);
 	int** dem = malloc(size * sizeof *dem);
 	for (int x = 0; x < size; x++) {
@@ -91,39 +91,6 @@ int** make_dem(int size, int roughness) {
 			dem[x][y] = dem[x][y]>99? 99: dem[x][y];
 		}
 	}
-	return dem;
-}
-
-int **static_dem() {
-	const int size = 5;
-
-	/*int data[size][size] = {
-			{49, 51, 51, 56, 57},
-			{46, 47, 50, 52, 54},
-			{45, 47, 48, 50, 49},
-			{46, 46, 47, 47, 47},
-			{45, 45, 45, 45, 47}
-	};*/
-
-	int data[5][5] = {
-			{12, 14, 15, 15, 16},
-			{16, 18, 18, 19, 17},
-			{18, 19, 21, 20, 17},
-			{19, 20, 18, 18, 15},
-			{20, 17, 14, 14, 13}
-	};
-
-
-	int** dem = malloc(size * sizeof *dem);
-
-	for (int x = 0; x < size; x++) {
-		dem[x] = malloc(size * sizeof *dem[x]);
-
-		for (int y = 0; y < size; y++) {
-			dem[x][y] = data[x][y];
-		}
-	}
-
 	return dem;
 }
 

@@ -71,7 +71,6 @@ int main() {
 
 	// Randomly generate a digital elevation map
 	int** dem = make_dem(SIZE, SIZE * 4);
-//	int **dem = static_dem();
 	print_2D_ascii(dem, SIZE);
 	printf("\n\n");
 
