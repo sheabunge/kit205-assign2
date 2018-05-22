@@ -1,6 +1,5 @@
 ﻿#include <stdbool.h>
 #include <stdlib.h>
-#include <limits.h>
 #include <stdio.h>
 #include "graph.h"
 
