@@ -1,7 +1,7 @@
 #include "dem.h"
-#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 /**
  * Print the values in a two-dimensional array
@@ -23,7 +23,7 @@ void print_2D(int** array2D, int size) {
 }
 
 /**
- * Print the values in a two-dimensional array as ascii art
+ * Print the values in a two-dimensional array as ASCII art
  * @param array2D
  * @param size
  */
@@ -61,10 +61,10 @@ int** make_dem(int size, int roughness) {
 	}
 	int r = roughness;
 
-	dem[0][0] =				50 - r / 2 + rand() % r;
-	dem[size-1][0] =		50 - r / 2 + rand() % r;
-	dem[0][size-1] =		50 - r / 2 + rand() % r;
-	dem[size-1][size-1] =	50 - r / 2 + rand() % r;
+	dem[0][0] =           50 - r / 2 + rand() % r;
+	dem[size-1][0] =      50 - r / 2 + rand() % r;
+	dem[0][size-1] =      50 - r / 2 + rand() % r;
+	dem[size-1][size-1] = 50 - r / 2 + rand() % r;
 
 	for (int step = (size - 1); step > 0; step /= 2) {
 		r = r > 1 ? r / 2:r;
@@ -78,10 +78,10 @@ int** make_dem(int size, int roughness) {
 
 				dem[cx*step + step / 2][cy*step + step / 2] = (a + b + c + d) / 4 + rand() % r - r/2;
 
-				dem[cx*step + step / 2][cy*step]		= (a + b) / 2 + rand() % r - r/2;
-				dem[cx*step][cy*step + step / 2]		= (a + c) / 2 + rand() % r - r/2;
+				dem[cx*step + step / 2][cy*step]        = (a + b) / 2 + rand() % r - r/2;
+				dem[cx*step][cy*step + step / 2]        = (a + c) / 2 + rand() % r - r/2;
 				dem[cx*step + step][cy*step + step / 2] = (b + d) / 2 + rand() % r-r/2;
-				dem[cx*step + step/2][cy*step + step]	= (c + d) / 2 + rand() % r-r/2;
+				dem[cx*step + step/2][cy*step + step]   = (c + d) / 2 + rand() % r-r/2;
 			}
 		}
 	}
@@ -115,28 +115,25 @@ void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(
 
 		// Can move south if not at the bottom of the map
 		if (x1 != size - 1) {
-			destinations[moves] = start + size;
-			moves++;
+			destinations[moves++] = start + size;
 		}
 
 		// Can move west if not at the left edge of the map
 		if (y1 != 0) {
-			destinations[moves] = start - 1;
-			moves++;
+			destinations[moves++] = start - 1;
 		}
 
 		// Can move east if not at the right edge of the map
 		if (y1 != size - 1) {
-			destinations[moves] = start + 1;
-			moves++;
+			destinations[moves++] = start + 1;
 		}
 
 		// Can move north if not at the top of the map
 		if (x1 != 0) {
-			destinations[moves] = start - size;
-			moves++;
+			destinations[moves++] = start - size;
 		}
 
+		// For each of these movements, calculate the destination vertices, and add new edges to the graph
 		for (int i = 0; i < moves; i++) {
 			int dest = destinations[i];
 
@@ -159,7 +156,7 @@ int **clone_dem(int **self, const int size) {
 	int** result = malloc(size * sizeof *result);
 
 	for (int x = 0; x < size; x++) {
-		result[x] = malloc(size * sizeof result[x]);
+		result[x] = malloc(size * sizeof *result[x]);
 
 		for (int y = 0; y < size; y++) {
 			result[x][y] = self[x][y];
