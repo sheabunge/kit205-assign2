@@ -44,14 +44,17 @@ void check_vertex(Graph *self, int vertex) {
  * @param weight  edge weight
  */
 void add_edge(Graph *self, int from, int dest, int weight) {
-	EdgeNodePtr node = malloc(sizeof *node);
 
+	// ensure both vertices are valid
 	check_vertex(self, from);
 	check_vertex(self, dest);
+
+	EdgeNodePtr node = malloc(sizeof *node);
 
 	node->edge.to_vertex = dest;
 	node->edge.weight = weight;
 
+	// insert the new edge node at the beginning of the existing list
 	node->next = self->edges[from].head;
 	self->edges[from].head = node;
 }
@@ -142,44 +145,40 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
  * @param target    vertex where path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
- * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ * @return linked list of path vertices
  */
-int *find_shortest_path_A(Graph *self, int source, int target, int *distance) {
+EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance) {
 
-	/* run Dijkstra's algorithm to retrieve a list of shortest paths */
+	// run Dijkstra's algorithm to retrieve a list of shortest paths
 	int *dist = malloc(sizeof(int) * self->V);
 	int *prev = malloc(sizeof(int) * self->V);
 	dijkstra(self, source, dist, prev);
 
-	// allocate memory for the largest possible path
-	int *path = malloc(sizeof(int) * self->V);
+	// pass the total path distance out of the function through a variable pointer
+	*distance = dist[target];
 
 	// trace the path from the target back to the source
-	int length = 0;
+	EdgeList path;
+	path.head = NULL;
+
 	int vertex = target;
 
 	while (vertex != -1) {
-		path[length] = vertex;
+		EdgeNodePtr node = malloc(sizeof *node);
+		node->edge.to_vertex = vertex;
+		node->edge.weight = 0;
+
+		// insert the new node at the beginning of the current path
+		node->next = path.head;
+		path.head = node;
+
 		vertex = prev[vertex];
-		length++;
 	}
 
-	*distance = dist[target];
-
-	// create a more appropriately sized array for the final path
-	int *final = malloc(sizeof(int) * (length + 1));
-	final[0] = length; // set the first index to the path length
-
-	// loop through the vertices in the path and add them to the final array in the correct order
-	for (int i = 0; i < length; i++) {
-		final[i + 1] = path[length - 1 - i];
-	}
-
-	// remove the temporary arrays and return the result
-	free(path);
 	free(dist);
 	free(prev);
-	return final;
+
+	return path;
 }
 
 /**
@@ -223,7 +222,7 @@ void floyd(Graph *self, int** dist, int**next) {
 				}
 			}
 		}
-		}
+	}
 }
 
 /**
@@ -234,11 +233,11 @@ void floyd(Graph *self, int** dist, int**next) {
  * @param target    vertex where path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
- * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ * @return linked list of path vertices
  */
-int *find_shortest_path_B(Graph *self, int source, int target, int *distance) {
+EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance) {
 
-	// Allocate memory for the two-dimensional arrays
+	// allocate memory for the two-dimensional arrays
 	int **dist = malloc(sizeof(int *) * self->V);
 	int **next = malloc(sizeof(int *) * self->V);
 
@@ -247,39 +246,44 @@ int *find_shortest_path_B(Graph *self, int source, int target, int *distance) {
 		next[i] = malloc(sizeof(int) * self->V);
 	}
 
-	// Run the Floyd-Warshall algorithm
+	// run the Floyd-Warshall algorithm
 	floyd(self, dist, next);
 
-	// Return an empty list if there is no valid path
-	if (next[source][target] == -1) {
-		int *final = malloc(sizeof(int));
-		*final = 0;
-		*distance = 0;
-		return final;
-	}
+	// create a new linked list to hold the path
+	EdgeList path;
+	path.head = NULL;
 
-	// Retrace the path from the source vertex to the target
-	int *path = malloc(sizeof(int) * self->V);
-	int length = 1;
-	path[0] = source;
-
-
-	int vertex = source;
-
-	while (vertex != target) {
-		vertex = next[vertex][target];
-		path[length] = vertex;
-		length++;
-	}
-
+	// pass the total path distance out of the function through a variable pointer
 	*distance = dist[source][target];
 
-	// Transpose the path into a more appropriately-sized array
-	int *final = malloc(sizeof(int) * (length + 1));
-	final[0] = length;
+	// return the empty list if no valid path was found
+	if (next[source][target] == -1) {
+		return path;
+	}
 
-	for (int i = 0; i < length; i++) {
-		final[i + 1] = path[i];
+	// retrace the path from the source vertex to the target
+	int vertex = source;
+	EdgeNodePtr prev = NULL;
+
+	while (vertex != target) {
+
+		// create a new node to insert into the list
+		EdgeNodePtr node = malloc(sizeof *node);
+
+		node->edge.to_vertex = vertex;
+		node->edge.weight = 0;
+
+		node->next = NULL;
+
+		// insert the new node immediately after the previous one
+		if (prev == NULL) {
+			path.head = node;
+		} else {
+			prev->next = node;
+		}
+
+		prev = node;
+		vertex = next[vertex][target];
 	}
 
 	// Free all allocated memory
@@ -288,9 +292,8 @@ int *find_shortest_path_B(Graph *self, int source, int target, int *distance) {
 		free(next[i]);
 	}
 
-	free(path);
 	free(dist);
 	free(next);
 
-	return final;
+	return path;
 }

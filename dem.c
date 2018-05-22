@@ -218,17 +218,21 @@ void destroy_dem(int **self, const int size) {
 
 /**
  * Apply a given path to a map
- * @param self    map to traverse
- * @param size    size of map
- * @param path    path to apply
- * @param length  length of path
+ * @param self
+ * @param size
+ * @param path
  */
-void traverse_map(int **self, const int size, int *path, const int length) {
+void traverse_map(int **self, const int size, EdgeList path) {
+	EdgeNodePtr current = path.head;
 
-	for (int i = 0; i < length; i++) {
-		int x = path[i] / size;
-		int y = path[i] % size;
+	while (current != NULL) {
+		int vertex = current->edge.to_vertex;
+
+		int x = vertex / size;
+		int y = vertex % size;
 
 		self[x][y] = -1;
+
+		current = current->next;
 	}
 }
