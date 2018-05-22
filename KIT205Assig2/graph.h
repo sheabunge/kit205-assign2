@@ -61,18 +61,18 @@ void add_edge(Graph *self, int from, int dest, int weight);
  * @param target    vertex where path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
- * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ * @return linked list of path vertices
  */
-int *find_shortest_path_A(Graph *self, int source, int target, int *distance);
+EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance);
 
 /**
- * Retrieve the shortest path from a given source to a destination the Floyd-Warshall algorithm
+ * Retrieve the shortest path from a given source to a destination using the Floyd-Warshall algorithm
  *
  * @param self      Graph instance
  * @param source    vertex where path should begin
  * @param target    vertex where path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
- * @return array with index 0 set to the length of the path, followed by ordered path vertices
+ * @return linked list of path vertices
  */
-int *find_shortest_path_B(Graph *self, int source, int target, int *distance);
+EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance);

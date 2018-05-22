@@ -45,7 +45,7 @@ int cost_funcB(int diff) {
  * @param cost_func
  * @return
  */
-void run_mission(int **dem, int size, int *find_shortest_path(Graph *, int, int, int *), int cost_func(int)) {
+void run_mission(int **dem, int size, EdgeList find_shortest_path(Graph *, int, int, int *), int cost_func(int)) {
 
 	// Create a graph and populate it from the digital elevation map
 	Graph graph = create_graph(size * size);
@@ -53,11 +53,11 @@ void run_mission(int **dem, int size, int *find_shortest_path(Graph *, int, int,
 
 	// Use the provided shortest path algorithm to find the most efficient path through the map
 	int energy;
-	int *path = find_shortest_path(&graph, 0, size * size - 1, &energy);
+	EdgeList path = find_shortest_path(&graph, 0, size * size - 1, &energy);
 
 	// Clone the provided map and plot the path onto it
 	int **map = clone_dem(dem, size);
-	traverse_map(map, size, path + 1, path[0]);
+	traverse_map(map, size, path);
 
 	print_2D_ascii(map, size);
 	printf("\ntotal energy: %d\n", energy);
@@ -68,11 +68,11 @@ void run_mission(int **dem, int size, int *find_shortest_path(Graph *, int, int,
 }
 
 int main() {
-	const int SIZE = 5;
+	const int SIZE = 33;
 
 	// Randomly generate a digital elevation map
-//	int** dem = make_dem(SIZE, SIZE * 4);
-	int **dem = static_dem();
+	int** dem = make_dem(SIZE, SIZE * 4);
+//	int **dem = static_dem();
 	print_2D_ascii(dem, SIZE);
 	printf("\n\n");
 

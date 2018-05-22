@@ -52,9 +52,8 @@ void generate_map_graph(int **self, int size, Graph *graph, int cost_func(int));
 
 /**
  * Apply a given path to a map
- * @param self    map to traverse
- * @param size    size of map
- * @param path    path to apply
- * @param length  length of path
+ * @param self
+ * @param size
+ * @param path
  */
-void traverse_map(int **self, int size, int *path, int length);
+void traverse_map(int **self, const int size, EdgeList path);
