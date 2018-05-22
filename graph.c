@@ -16,7 +16,7 @@ Graph create_graph(int vertices) {
 	Graph self;
 
 	self.V = vertices;
-	self.edges = malloc(sizeof(self.edges) * self.V);
+	self.edges = malloc(self.V * sizeof *self.edges);
 
 	for (int v = 0; v < self.V; v++) {
 		self.edges[v].head = NULL;
@@ -88,7 +88,7 @@ void destroy_graph(Graph *self) {
 void dijkstra(Graph *self, int source, int *dist, int *prev) {
 
 	// Instead of using sets, use an array to determine if each node has been visited
-	int *unvisited = malloc(sizeof(bool) * self->V);
+	bool *unvisited = malloc(self->V * sizeof *unvisited);
 
 	// Also keep a running count of how many nodes have been visited
 	int visits = 0;
@@ -150,8 +150,8 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
 EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance) {
 
 	// run Dijkstra's algorithm to retrieve a list of shortest paths
-	int *dist = malloc(sizeof(int) * self->V);
-	int *prev = malloc(sizeof(int) * self->V);
+	int *dist = malloc(self->V * sizeof *dist);
+	int *prev = malloc(self->V * sizeof *prev);
 	dijkstra(self, source, dist, prev);
 
 	// pass the total path distance out of the function through a variable pointer
@@ -238,12 +238,12 @@ void floyd(Graph *self, int** dist, int**next) {
 EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance) {
 
 	// allocate memory for the two-dimensional arrays
-	int **dist = malloc(sizeof(int *) * self->V);
-	int **next = malloc(sizeof(int *) * self->V);
+	int **dist = malloc(self->V * sizeof *dist);
+	int **next = malloc(self->V * sizeof *next);
 
 	for (int i = 0; i < self->V; i++) {
-		dist[i] = malloc(sizeof(int) * self->V);
-		next[i] = malloc(sizeof(int) * self->V);
+		dist[i] = malloc(self->V * sizeof *dist[i]);
+		next[i] = malloc(self->V * sizeof *next[i]);
 	}
 
 	// run the Floyd-Warshall algorithm
