@@ -24,8 +24,6 @@ void print_2D_ascii(int** array2D, int size);
  */
 int** make_dem(int size, int roughness);
 
-int **static_dem();
-
 /**
  * Copy the contents of a DEM into a new variable
  * @param self
@@ -56,4 +54,4 @@ void generate_map_graph(int **self, int size, Graph *graph, int cost_func(int));
  * @param size
  * @param path
  */
-void traverse_map(int **self, const int size, EdgeList path);
+void traverse_map(int **self, int size, EdgeList path);
