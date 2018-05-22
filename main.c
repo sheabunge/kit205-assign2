@@ -68,11 +68,11 @@ void run_mission(int **dem, int size, EdgeList find_shortest_path(Graph *, int, 
 }
 
 int main() {
-	const int SIZE = 5;
+	const int SIZE = 33;
 
 	// Randomly generate a digital elevation map
-//	int** dem = make_dem(SIZE, SIZE * 4);
-	int **dem = static_dem();
+	int** dem = make_dem(SIZE, SIZE * 4);
+//	int **dem = static_dem();
 	print_2D_ascii(dem, SIZE);
 	printf("\n\n");
 
