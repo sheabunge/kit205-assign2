@@ -50,7 +50,7 @@ void print_2D_ascii(int** array2D, int size) {
  * @return
  */
 int** make_dem(int size, int roughness) {
-	unsigned seed = 0; // (unsigned) time(NULL);
+	unsigned seed = (unsigned) time(NULL);
 	srand(seed);
 	int** dem = malloc(size * sizeof *dem);
 	for (int x = 0; x < size; x++) {

@@ -267,11 +267,9 @@ EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance
 
 			// create a new node to insert into the list
 			EdgeNodePtr node = malloc(sizeof *node);
-
+			node->next = NULL;
 			node->edge.to_vertex = vertex;
 			node->edge.weight = 0;
-
-			node->next = NULL;
 
 			// insert the new node immediately after the previous one
 			if (prev == NULL) {
