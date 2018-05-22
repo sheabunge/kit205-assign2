@@ -7,7 +7,6 @@
  * Display a message and wait for user input
  */
 void wait_for_exit() {
-	return; // REMOVE BEFORE SUBMISSION
 	printf("\npress enter to exit\n");
 	getchar();
 }
