@@ -13,8 +13,7 @@ void print_2D(int** array2D, int size) {
 		for (int y = 0; y < size; y++) {
 			if (array2D[x][y] >= 0) {
 				printf("%2d ", array2D[x][y]);
-			}
-			else {
+			} else {
 				printf("() ");
 			}
 		}
@@ -101,35 +100,35 @@ int** make_dem(int size, int roughness) {
  * @param graph      Graph instance to add new edges to
  * @param cost_func  function to use for normalising edge weights
  */
-void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(int)) {
+void generate_map_graph(int **self, int size, Graph *graph, int cost_func(int)) {
 	const int VERTICES = size * size;
 
 	// Loop through every point in the map
 	for (int start = 0; start < VERTICES; start++) {
-		int x1 = start / size;
-		int y1 = start % size;
+		int x = start / size;
+		int y = start % size;
 
 		// Create a list of potential movement destinations
 		int destinations[4];
 		int moves = 0;
 
 		// Can move south if not at the bottom of the map
-		if (x1 != size - 1) {
+		if (x != size - 1) {
 			destinations[moves++] = start + size;
 		}
 
 		// Can move west if not at the left edge of the map
-		if (y1 != 0) {
+		if (y != 0) {
 			destinations[moves++] = start - 1;
 		}
 
 		// Can move east if not at the right edge of the map
-		if (y1 != size - 1) {
+		if (y != size - 1) {
 			destinations[moves++] = start + 1;
 		}
 
 		// Can move north if not at the top of the map
-		if (x1 != 0) {
+		if (x != 0) {
 			destinations[moves++] = start - size;
 		}
 
@@ -137,10 +136,10 @@ void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(
 		for (int i = 0; i < moves; i++) {
 			int dest = destinations[i];
 
-			int x2 = dest / size;
-			int y2 = dest % size;
+			int dest_x = dest / size;
+			int dest_y = dest % size;
 
-			int cost = cost_func(self[x2][y2] - self[x1][y1]);
+			int cost = cost_func(self[dest_x][dest_y] - self[x][y]);
 			add_edge(graph, start, dest, cost);
 		}
 	}
@@ -152,7 +151,7 @@ void generate_map_graph(int **self, const int size, Graph *graph, int cost_func(
  * @param size
  * @return
  */
-int **clone_dem(int **self, const int size) {
+int **clone_dem(int **self, int size) {
 	int** result = malloc(size * sizeof *result);
 
 	for (int x = 0; x < size; x++) {
@@ -171,7 +170,7 @@ int **clone_dem(int **self, const int size) {
  * @param self
  * @param size
  */
-void destroy_dem(int **self, const int size) {
+void destroy_dem(int **self, int size) {
 
 	for (int x = 0; x < size; x++) {
 		free(self[x]);
@@ -186,7 +185,7 @@ void destroy_dem(int **self, const int size) {
  * @param size
  * @param path
  */
-void traverse_map(int **self, const int size, EdgeList path) {
+void traverse_map(int **self, int size, EdgeList path) {
 	EdgeNodePtr current = path.head;
 
 	while (current != NULL) {
