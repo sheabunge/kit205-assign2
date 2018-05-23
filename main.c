@@ -29,10 +29,11 @@ int cost_funcA(int diff) {
  */
 int cost_funcB(int diff) {
 	int cost = 1;
-	if (diff > 0)
+	if (diff > 0) {
 		cost += diff * diff;
-	else
+	} else {
 		cost += diff;
+	}
 	return cost;
 }
 
