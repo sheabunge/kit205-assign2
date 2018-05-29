@@ -142,8 +142,8 @@ void dijkstra(Graph *self, int source, int *dist, int *prev) {
  * Retrieve the shortest path from a given source to a destination using Dijkstra's algorithm
  *
  * @param self      Graph instance
- * @param source    vertex where path should begin
- * @param target    vertex where path should end
+ * @param source    vertex where the path should begin
+ * @param target    vertex where the path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
  * @return linked list of path vertices
@@ -156,7 +156,9 @@ EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance
 	dijkstra(self, source, dist, prev);
 
 	// pass the total path distance out of the function through a variable pointer
-	*distance = dist[target];
+	if (distance != NULL) {
+		*distance = dist[target];
+	}
 
 	// trace the path from the target back to the source
 	EdgeList path;
@@ -164,7 +166,9 @@ EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance
 
 	int vertex = target;
 
+	// the source vertex has -1 as its previous value
 	while (vertex != -1) {
+		// construct a new edge node leading to the current vertex
 		EdgeNodePtr node = malloc(sizeof *node);
 		node->edge.to_vertex = vertex;
 		node->edge.weight = 0;
@@ -230,8 +234,8 @@ void floyd(Graph *self, int **dist, int **next) {
  * Retrieve the shortest path from a given source to a destination using the Floyd-Warshall algorithm
  *
  * @param self      Graph instance
- * @param source    vertex where path should begin
- * @param target    vertex where path should end
+ * @param source    vertex where the path should begin
+ * @param target    vertex where the path should end
  * @param distance  pointer to address for storing total distance used by the path
  *
  * @return linked list of path vertices
@@ -251,7 +255,9 @@ EdgeList find_shortest_path_B(Graph *self, int source, int target, int *distance
 	floyd(self, dist, next);
 
 	// pass the total path distance out of the function through a variable pointer
-	*distance = dist[source][target];
+	if (distance != NULL) {
+		*distance = dist[source][target];
+	}
 
 	// create a new linked list to hold the path
 	EdgeList path;
