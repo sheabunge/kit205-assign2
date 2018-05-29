@@ -1,4 +1,5 @@
 #pragma once
+
 #include "graph.h"
 
 /**
@@ -6,14 +7,14 @@
  * @param array2D
  * @param size
  */
-void print_2D(int** array2D, int size);
+void print_2D(int **array2D, int size);
 
 /**
  * Print the values in a two-dimensional array as ascii art
  * @param array2D
  * @param size
  */
-void print_2D_ascii(int** array2D, int size);
+void print_2D_ascii(int **array2D, int size);
 
 /**
  * Generate a digital elevation map (DEM)
@@ -22,7 +23,7 @@ void print_2D_ascii(int** array2D, int size);
  * @param roughness  higher values give rougher terrain
  * @return
  */
-int** make_dem(int size, int roughness);
+int **make_dem(int size, int roughness);
 
 /**
  * Copy the contents of a DEM into a new variable

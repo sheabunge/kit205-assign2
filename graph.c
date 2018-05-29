@@ -31,6 +31,7 @@ Graph create_graph(int vertices) {
  * @param vertex
  */
 void check_vertex(Graph *self, int vertex) {
+
 	if (vertex < 0 || vertex >= self->V) {
 		fprintf(stderr, "vertex %d is out of range\n", vertex);
 	}
@@ -187,7 +188,7 @@ EdgeList find_shortest_path_A(Graph *self, int source, int target, int *distance
  * @param dist  Pointer to empty two-dimensional array of size self->V square
  * @param next  Pointer to empty two-dimensional array of size self->V square
  */
-void floyd(Graph *self, int** dist, int**next) {
+void floyd(Graph *self, int **dist, int **next) {
 
 	// initialise the two-dimensional arrays with default values
 	for (int i = 0; i < self->V; i++) {
