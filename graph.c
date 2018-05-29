@@ -1,10 +1,11 @@
 ﻿#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 #include "graph.h"
 
 // using INT_MAX breaks the Floyd-Warshall algorithm; this is a safer value
-#define INFINITY 9999
+const int INFINITY = INT_MAX / 2;
 
 /**
  * Create a new instance of the graph type
