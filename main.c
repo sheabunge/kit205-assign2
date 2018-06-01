@@ -65,6 +65,13 @@ void run_mission(int **dem, int size, EdgeList find_shortest_path(Graph *, int, 
 	// Free memory allocated to data structures
 	destroy_dem(map, size);
 	destroy_graph(&graph);
+
+	EdgeNodePtr current = path.head;
+	while (current != NULL) {
+		EdgeNodePtr to_free = current;
+		current = current->next;
+		free(to_free);
+	}
 }
 
 int main() {
